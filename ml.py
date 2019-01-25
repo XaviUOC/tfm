@@ -142,7 +142,7 @@ def main(filename):
 
     # Model 3: LSTM
     period, features = 3, 10
-    lstm(train_x, train_y, test_x, test_y, period + 1, features, epochs=200)
+    lstm(train_x, train_y, test_x, test_y, period + 1, features, epochs=100)
 
 
 if __name__ == "__main__":
