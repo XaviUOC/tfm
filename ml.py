@@ -6,8 +6,7 @@ import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import precision_score, confusion_matrix
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Dropout, Activation
-from matplotlib import pyplot as plt
+from keras.layers import Dense, LSTM, Dropout
 from keras import backend as K
 from mining import compute_trend
 
@@ -83,8 +82,6 @@ def logistic_regression(train_x, train_y, test_x, test_y, epochs):
 
     # Implement the model
     model = Sequential()
-    # model.add(Dense(1, input_dim=train_x.shape[1]))
-    # model.add(Activation("softmax"))
     model.add(Dense(train_x.shape[1], input_dim=train_x.shape[1],
               activation="relu"))
     model.add(Dense(1, activation="sigmoid"))
@@ -109,18 +106,12 @@ def lstm(train_x, train_y, test_x, test_y, period, features, epochs):
 
     # Implement the model
     model = Sequential()
-    model.add(LSTM(256, input_shape=(train_x.shape[1:])))
+    model.add(LSTM(128, input_shape=(train_x.shape[1:])))
     model.add(Dropout(0.2))
     model.add(Dense(1))
-    # model.add(Activation('softmax'))
-    # model.compile(loss='mae', optimizer='sgd')
-
-    # from keras.utils import to_categorical
-    # train_y = to_categorical(train_y)
-
     model.compile(loss="mae", optimizer="sgd")
-    history = model.fit(train_x, train_y, epochs=epochs, batch_size=1,
-                        class_weight={0: 1., 1: ratio})
+    model.fit(train_x, train_y, epochs=epochs, batch_size=1,
+              class_weight={0: 1., 1: ratio})
 
     # Check the goodness of the prediction
     prediction = model.predict_classes(test_x)
@@ -128,14 +119,6 @@ def lstm(train_x, train_y, test_x, test_y, period, features, epochs):
 
     # Print the result
     print_metric("LSTM regresion", test_y, prediction)
-    pass
-    # evaluation = model.evaluate(test_x, test_y)
-    # print("Summary: Loss over the test dataset: {0:.2}, Accuracy: {1:.2}".format(*evaluation))
-
-    # Ploting
-    plt.plot(history.history["loss"], label="train")
-    plt.legend()
-    plt.savefig("lstm.png")
 
 
 def main(filename):
@@ -153,11 +136,9 @@ def main(filename):
 
     # split the data in training & test sets
     train_x, train_y, test_x, test_y = train_test(norm_data)
-    #x, y = norm_data[:, :-1], norm_data[:, -1:]
-    # TODO: train_x, train_y, test_x, test_y = train_test_split(x, y, test_size=.33)
 
     # Model 2: Logistic classification
-    # logistic_regression(train_x, train_y, test_x, test_y, epochs=50)
+    logistic_regression(train_x, train_y, test_x, test_y, epochs=50)
 
     # Model 3: LSTM
     period, features = 3, 10

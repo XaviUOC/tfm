@@ -92,32 +92,6 @@ def main(input_file, output_file):
     # Label the dataset with the actual trend
     sup_df["trend"] = compute_trend(sup_df.close_1, df.high)
 
-    # Plot
-    import matplotlib.pyplot as plt
-    # df.close.plot()
-    # df.bollinger_upper.plot()
-    # df.bollinger_middle.plot()
-    # df.bollinger_lower.plot()
-    # df.rsi.plot()
-    # plt.legend()
-    # plt.show()
-
-    # Pie
-    import matplotlib.pyplot as plt
-
-    # # Pie chart, where the slices will be ordered and plotted counter-clockwise:
-    # labels = 'Alcista', 'Bajista'
-    # sizes = [sup_df.trend.sum(), (~sup_df.trend).sum()]
-    # explode = (.1, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
-    #
-    # fig1, ax1 = plt.subplots()
-    # ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
-    #         shadow=True, startangle=90, colors=["green", "red"])
-    # ax1.axis(
-    #     'equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    #
-    # plt.show()
-
     # Merge both dataframes
     res_df = df.merge(sup_df, left_on="timestamp", right_on="timestamp")
 
