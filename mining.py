@@ -84,7 +84,7 @@ def main(input_file, output_file):
     # Compute the technical indicators
     df = compute_indicators(df)
 
-    # Create the supervised dataset
+    # Create the supervised dataset in a window of 3 hours
     period = 3 # 3 hours
     sup_df = to_supervised(df, period)
     df = df.iloc[period:]
@@ -92,11 +92,8 @@ def main(input_file, output_file):
     # Label the dataset with the actual trend
     sup_df["trend"] = compute_trend(sup_df.close_1, df.high)
 
-    # Merge both dataframes
-    res_df = df.merge(sup_df, left_on="timestamp", right_on="timestamp")
-
     # Save to file
-    res_df.to_csv(output_file)
+    sup_df.to_csv(output_file)
 
 
 if __name__ == '__main__':

@@ -51,10 +51,11 @@ def print_metric(model_name, trend, prediction):
 
 
 def minimum_viable_algorithm(df):
-    # The prediction is what happened the last 3 hours in average
-    avg_high = (df.high_1 + df.high_2 + df.high_3) / 3.
-    prediction = compute_trend(df.close, avg_high)
-    print_metric("Finger rule", df.trend.values, prediction.values)
+    # The prediction is checking if the highest value raised more than
+    # the benefit percentage
+    max_high = df[["high_1", "high_2", "high_3"]].values.max(axis=1)
+    prediction = compute_trend(df.close_1.values, max_high)
+    print_metric("Minimum viable algorithm", df.trend.values, prediction)
 
 
 def as_keras_metric(method):
@@ -142,7 +143,7 @@ def main(filename):
 
     # Model 3: LSTM
     period, features = 3, 10
-    lstm(train_x, train_y, test_x, test_y, period + 1, features, epochs=100)
+    lstm(train_x, train_y, test_x, test_y, period, features, epochs=100)
 
 
 if __name__ == "__main__":
